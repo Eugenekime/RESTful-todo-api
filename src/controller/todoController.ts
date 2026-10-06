@@ -50,7 +50,7 @@ function getTodoById(req: Request, res: Response, next: NextFunction) {
         details: [{ field: 'id', message: 'Id not found', value: id }],
       });
     }
-    return res.json(data);
+    return res.json({ success: true, data });
   } catch (error) {
     next(error);
   }
@@ -119,7 +119,8 @@ function patchTodo(req: Request, res: Response, next: NextFunction) {
     if (
       body.text === undefined &&
       body.completed === undefined &&
-      body.priority === undefined
+      body.priority === undefined &&
+      body.category === undefined
     ) {
       return res.status(400).json({
         success: false,
@@ -175,7 +176,7 @@ function deleteTodo(req: Request, res: Response, next: NextFunction) {
       });
     }
 
-    return res.status(204);
+    return res.status(204).send();
   } catch (error) {
     next(error);
   }
@@ -184,7 +185,7 @@ function deleteTodo(req: Request, res: Response, next: NextFunction) {
 function getTodoStats(req: Request, res: Response, next: NextFunction) {
   try {
     const stats = todoService.getStats();
-    return res.json(stats);
+    return res.json({ success: true, data: stats });
   } catch (error) {
     next(error);
   }

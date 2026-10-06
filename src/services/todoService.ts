@@ -69,10 +69,11 @@ function getTodos(options: TodoQueryOptions) {
 
   const start = page * limit - limit;
   const end = page * limit;
+  const total = filteredTodos.length;
 
   filteredTodos = filteredTodos.slice(start, end);
 
-  return { todos: filteredTodos, meta: { limit, page } };
+  return { todos: filteredTodos, meta: { limit, page, total } };
 }
 
 function getTodoById(id: number): Todo | null {
@@ -83,7 +84,7 @@ function getTodoById(id: number): Todo | null {
 function createTodo(input: CreateTodoInput): Todo {
   const newTodo = {
     id: nextId,
-    text: input.text,
+    text: input.text.trim(),
     completed: false,
     priority: input.priority ?? 'low',
     createdAt: new Date(),
@@ -112,7 +113,7 @@ function updateTodo(id: number, input: UpdateTodoInput): Todo | null {
     return null;
   }
   if (input.text !== undefined) {
-    todo.text = input.text;
+    todo.text = input.text.trim();
   }
 
   if (input.completed !== undefined) {
